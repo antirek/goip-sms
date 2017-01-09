@@ -1,0 +1,24 @@
+{
+  "name": "goip-sms",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antirek/goip-sms.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antirek/goip-sms/issues"
+  },
+  "homepage": "https://github.com/antirek/goip-sms#readme",
+  "dependencies": {
+    "base-64": "^0.1.0",
+    "minimalistic-assert": "^1.0.0",
+    "unirest": "^0.5.1"
+  }
+}
