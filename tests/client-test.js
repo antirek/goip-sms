@@ -1,30 +1,43 @@
 var assert = require('assert');
 var http = require('http');
 
+var express = require('express');
+var bodyParser = require('body-parser');
+var basicAuth = require('express-basic-auth');
+
 describe("Goip with server", function() {
     var Goip = require('../index');
 
     it("run test simple http server", function(done){
 
-        var handle = function (req, res) {
+        var app = express();
+        app.use(basicAuth({
+            users: { 'admin': 'password' }
+        }));
+        // parse application/x-www-form-urlencoded
+        app.use(bodyParser.urlencoded({extended: true}));
 
-            console.log(req.url);
-            if (req.url == '/default/en_US/tools.html?type=sms') {
-                res.end("good message");    
-            } else {
-                res.end("bad message");
-            }
-        };
+        app.get("/default/en_US/tools.html", function (req, res) {
+          res.status(200).send(req.body);
+        });
+
+        app.post("/default/en_US/sms_info.html", function (req, res) {
+          res.status(200).send(req.body);
+        });
 
         var port = 8999;
-        var server = http.createServer(handle);
+        //var server = http.createServer(handle);
 
-        server.listen(port);
+        app.listen(port);
 
         var goipsms = new Goip({host: 'localhost', port: port});
 
         goipsms
-            .send()
+            .send({
+                number: '89135292926',
+                message: 'Привет',
+                line: '8'
+            })
             .then(function(response) {
                 console.log(response)
                 done();

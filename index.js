@@ -39,17 +39,45 @@ var Goip = function (opts) {
         });
     };
 
-    var sendRequest = function (number, message, line) {
-
+    var findSmskey = function (html) {
+        var key = '12';
+        return Promise.resolve(key);
     };
 
-    var send = function () {
+    var getSendUrl = function () {
+        return [
+            'http://', 
+            host, 
+            port ? ':' + port : '',
+            '/default/en_US/sms_info.html?type=sms'
+            ].join('');
+    };
+
+    var sendRequest = function (params) {
+        return new Promise(function(resolve, reject) {
+            unirest
+                .post(getSendUrl())
+                .header(getAuthorizationHeader())
+                .header('Content-Type', 'application/x-www-form-urlencoded')
+                .send(params)
+                .end(function (response) {
+                  resolve(response);
+                });
+        });
+    };
+
+    var send = function (params) {
+
+        assert(params.number);
+        assert(params.message);
+        assert(params.line);
         
         return prepareRequest()
             .then(function (response) {
-                //console.log('response', response);
+                return sendRequest(params);
+            })
+            .then(function (response) {
                 return Promise.resolve(response);
-//                return sendRequest(number, message, line);
             });
     }
 
