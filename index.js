@@ -47,7 +47,8 @@ var Goip = function (opts) {
         
         return prepareRequest()
             .then(function (response) {
-                console.log('response', response);
+                //console.log('response', response);
+                return Promise.resolve(response);
 //                return sendRequest(number, message, line);
             });
     }
