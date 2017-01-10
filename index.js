@@ -76,16 +76,19 @@ var Goip = function (opts) {
         
         return prepareRequest()
             .then(function (response) {
-
-                var smskey = findSmskey(response.body);
-                params.smskey = smskey;
-                
-                return sendRequest(params);
+                //console.log('body',response.body);
+                if (response.body) {
+                    var smskey = findSmskey(response.body);
+                    params.smskey = smskey;
+                    return sendRequest(params);
+                } else {
+                    return Promise.reject("no response body");
+                }
             })
             .then(function (response) {
                 return Promise.resolve(response);
             });
-    }
+    };
 
     return {
         findSmskey: findSmskey,

@@ -12,7 +12,7 @@ describe("Goip with server", function() {
 
         var app = express();
         app.use(basicAuth({
-            users: {'admin': 'password'}
+            users: {'root': 'root'}
         }));
         // parse application/x-www-form-urlencoded
         app.use(bodyParser.urlencoded({extended: true}));
@@ -32,7 +32,7 @@ describe("Goip with server", function() {
 
         app.listen(port);
 
-        var goipsms = new Goip({host: 'localhost', port: port});
+        var goipsms = new Goip({host: 'localhost', port: port, user: 'root', password: 'root'});
 
         goipsms
             .send({
