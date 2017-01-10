@@ -2,7 +2,8 @@
 
 var unirest = require('unirest');
 var base64 = require('base-64');
-var assert = require('minimalistic-assert');
+var assert = require('assert');
+var cheerio = require('cheerio');
 
 var Goip = function (opts) {
 
@@ -40,8 +41,9 @@ var Goip = function (opts) {
     };
 
     var findSmskey = function (html) {
-        var key = '12';
-        return Promise.resolve(key);
+        var $ = cheerio.load(html);
+        var key = $('input[name=smskey]').val();
+        return key;
     };
 
     var getSendUrl = function () {
@@ -74,6 +76,10 @@ var Goip = function (opts) {
         
         return prepareRequest()
             .then(function (response) {
+
+                var smskey = findSmskey(response.body);
+                params.smskey = smskey;
+                
                 return sendRequest(params);
             })
             .then(function (response) {
@@ -82,6 +88,7 @@ var Goip = function (opts) {
     }
 
     return {
+        findSmskey: findSmskey,
         send: send
     };
 };
