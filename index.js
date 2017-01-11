@@ -79,8 +79,17 @@ var Goip = function (opts) {
                 //console.log('body',response.body);
                 if (response.body) {
                     var smskey = findSmskey(response.body);
-                    params.smskey = smskey;
-                    return sendRequest(params);
+                    
+                    var message = {
+                        smskey: smskey,
+                        action: 'SMS',
+                        telnum: params.number,
+                        smscontent: params.message,
+                        line: params.line,
+                        send: 'Send'
+                    };
+
+                    return sendRequest(message);
                 } else {
                     return Promise.reject("no response body");
                 }
